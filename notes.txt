@@ -1,0 +1,116 @@
+
+- user inputs differ accross different language s
+    - these are usually called "callbacks event handlers, etc 
+    - callbacks are anything that is interactive 
+    - callbacks - pass in when library supports it and 
+        library will pass it into the binding 
+    - onclick event is passed in as a parameter to the button click fucntion
+
+- In JS, callbacks are functions that we can pass as objects 
+    - first we must make the functions anonymous by removing 
+        function name and assigning it to a variable
+    - this allows you to use the functions as arguments 
+    - we can pass functions to other functions as arguments 
+    - in JS and SVG, callbacks are functions that we pass as objects 
+
+
+- how do callbacks help us build toolkits? 
+    - seperation of concerns/code modularity 
+    - enable other programmers to customize interactions 
+        with the widgets 
+    - asynchronous operations (promises)
+            - request, do other stuff while waiting for request to come back
+- containers can be placed inside containers 
+    - container that holds the container etc 
+- decorator pattern 
+    - add behavior to an exisiting graphical objectg 
+    - extend functionality of object without 
+    - changing the behvaior 
+    - ex: creating multiple versions of a selector widget 
+    - 
+
+
+    - use github pages to host code 
+    - netlify to host code
+
+
+
+
+    // // File name: mytoolkit.js
+
+// import { group } from 'node:console';
+// import {SVG} from './svg.min.js';
+
+// // SVG.on(document, 'DOMContentLoaded', function()
+// // {
+// //     var drawPage = SVG().addTo('body').size('1000px','1000px');
+
+// // })
+// // {
+// //     var btn = new Button;
+// //     btn.onclick(function(event){
+// //         console.log("clicked");
+// //     })
+// // });
+// var draw = SVG().addTo('body').size('100%','100%');
+// var window = draw.group();
+// window.rect(400,400).stroke("blue").fill('white')
+
+// var MyToolkit = (function() {
+//     var Button = function(){
+//         // var buttonn = draw.group();
+
+//         // var draw = SVG().addTo('body').size('100%','100%');
+//         var rect = draw.rect(100,50).fill('red')
+
+//         group.add(rect);
+//         // var text = buttonn.text("hi").move("2,4");
+//         // var d = draw.text('hi');
+//         var clickEvent = null
+
+
+
+
+
+//         var text = draw.text("Lorem ipsum dolor sit amet consectetur.\nCras sodales imperdiet auctor.")
+
+        
+
+//         rect.mouseover(function(){
+//             this.fill({ color: 'blue'})
+        
+//         })
+//         rect.mouseout(function(){
+//             this.fill({ color: 'red'})
+//         })
+//         rect.mouseup(function(){
+//             this.fill({ color: 'red'})
+//         })
+//         rect.click(function(event){
+//             this.fill({ color: 'pink'})
+//             if(clickEvent != null)
+//                 clickEvent(event)
+//         })
+//         return {
+//             move: function(x, y) {
+//                 rect.move(x, y);
+//             },
+//             onclick: function(eventHandler){
+//                 clickEvent = eventHandler
+//             }
+//             // setText: function(text)
+//             // {
+//             //     // rect.id('text',text)
+//             //     draw.text('hi');
+
+//             // }
+//         }
+//     }
+
+// return {Button}
+// }());
+
+// export{MyToolkit}
+
+
+// File name: mytoolkit.js
