@@ -53,8 +53,13 @@ console.log(x[1]);
 
 
 
-var x = new MyToolkit.scrollBar(300);
-x.move(100,800)
+var x = new MyToolkit.scrollBar(400);
+// x.move(100,900)
+
+
+// var y = new MyToolkit.progressBar(500, 45);
+// y.move(100,1000)
+
 
 
 

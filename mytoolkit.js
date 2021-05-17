@@ -7,10 +7,26 @@ var draw = SVG().addTo('body').size('120%','150%');
 var MyToolkit = (function() {
     var progressBar = function(width, increment)
     {
+       
+        var bar = draw.group();
+        var rect = draw.rect(width,40).fill('white').opacity("0.4").stroke('black')
+
+        var incBar = draw.rect(70,60).fill('black')
+        // bar.add(rect);
+        // bar.add(incBar)
 
         return {
             getIncrement: function() {
                 return increment
+            },
+
+            setIncrement: function() {
+
+            },
+            move: function(x, y) {
+                rect.move(x, y);
+                rect.x = x;
+                rect.y = y;
             },
         }
 
@@ -23,20 +39,71 @@ var MyToolkit = (function() {
 
     var scrollBar = function(height)
     {
-        var button = draw.group();
+        var bar = draw.group();
+        var width = 20
 
         var rect = draw.rect(20,height).fill('white').opacity("0.4").stroke('black')
-        var thumb = draw.rect(5,5).fill('red')
+        var thumb = draw.rect(width,20).fill('black')
 
-        button.add(rect)
-        button.add(thumb)
+
+        // rect.add(thumb)
+
+        bar.add(rect)
+        bar.add(thumb)
+        console.log('hi')
+
+        // var runner = thumb.animate().height(9)
+        // runner.loop(4000,200,2)
+
+
+
+        // thumb.animate(8000, 8000, 'now')
+
+       scroll()
+
+        // var i; 
+        // for (i; i++; i<100)
+        // {
+        //     thumb.move(0,i)
+        //     i += 10
+        //     console.log(i)
+
+        // }
+
+        function scroll()
+        {
+
+
+            for(let idx=0; idx < height; idx++) {
+                // thumb.move(0,idx)
+                // var thumb = draw.rect(20,idx).fill('black')
+        
+                // idx += 1
+                thumb = draw.rect(20,width).fill('black')
+                var runner = thumb.animate().height(9)
+                runner.loop(1000,200,20)
+                idx += 10
+                width += 10;
+
+
+                console.log(width)
+
+            }
+            
+        }
+
+        
+
 
         return {
             move: function(x, y) {
                 rect.move(x, y);
                 rect.x = x;
                 rect.y = y;
+                thumb.move(x,y)
             },
+
+           
         }
 
     }
@@ -517,7 +584,7 @@ var MyToolkit = (function() {
 
 
 
-return {Button, CheckBox, textBox, scrollBar, Radio, radioButtons}
+return {Button, CheckBox, textBox, scrollBar, progressBar, Radio, radioButtons}
 }());
 
 export{MyToolkit}
