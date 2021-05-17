@@ -5,6 +5,47 @@ var draw = SVG().addTo('body').size('120%','150%');
 
 
 var MyToolkit = (function() {
+    var progressBar = function(width, increment)
+    {
+
+        return {
+            getIncrement: function() {
+                return increment
+            },
+        }
+
+
+    }
+
+
+
+
+
+    var scrollBar = function(height)
+    {
+        var button = draw.group();
+
+        var rect = draw.rect(20,height).fill('white').opacity("0.4").stroke('black')
+        var thumb = draw.rect(5,5).fill('red')
+
+        button.add(rect)
+        button.add(thumb)
+
+        return {
+            move: function(x, y) {
+                rect.move(x, y);
+                rect.x = x;
+                rect.y = y;
+            },
+        }
+
+    }
+
+    
+
+
+
+
     var textBox = function()
     {
         var frame = draw.group();
@@ -34,6 +75,8 @@ var MyToolkit = (function() {
             var runner = caret.animate().width(0)
             runner.loop(1000,1,0)
 
+            
+
 
 
 
@@ -55,22 +98,22 @@ var MyToolkit = (function() {
 
         })
 
-        function getText(caret)
-        {
             SVG.on(window, 'keyup', (event) => {
-                text.text(text.text() + event.key)
-                // caret.x(text.length() + 40)
-    
-            })
+            text.text(text.text() + event.key)
+            update()
+            // caret.x(text.length() + 40)
+
             
+        })
 
-        }
-
-        function getCursor()
+        function update()
         {
             caret.x(text.length() + 40)
 
         }
+
+
+   
 
         return {
             // getText: function()
@@ -474,7 +517,7 @@ var MyToolkit = (function() {
 
 
 
-return {Button, CheckBox, textBox, Radio, radioButtons}
+return {Button, CheckBox, textBox, scrollBar, Radio, radioButtons}
 }());
 
 export{MyToolkit}

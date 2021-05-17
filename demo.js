@@ -53,6 +53,11 @@ console.log(x[1]);
 
 
 
+var x = new MyToolkit.scrollBar(300);
+x.move(100,800)
+
+
+
 // var check = new MyToolkit.Radio(4);
 // check.move(100,700);
 // check.setText('Radio2')
