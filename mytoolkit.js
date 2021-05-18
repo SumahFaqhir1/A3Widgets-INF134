@@ -5,30 +5,97 @@ var draw = SVG().addTo('body').size('120%','150%');
 
 
 var MyToolkit = (function() {
-    var progressBar = function(width, increment)
+    var toggle = function()
     {
-       
-        var bar = draw.group();
-        var rect = draw.rect(width,40).fill('white').opacity("0.4").stroke('black')
+        var frame = draw.group();
+        var rect = draw.rect(75,40).fill('grey').rx("20").ry("20").opacity("0.4").stroke('black')
+        var circle = draw.circle(39,39).fill('white').stroke('black').opacity("0.6")
+        frame.add(rect)
+        frame.add(circle)
 
-        var incBar = draw.rect(70,60).fill('black')
-        // bar.add(rect);
-        // bar.add(incBar)
+        var toggleOn = false;
+
+  
+        var clickEvent = null
+        var stateEvent = null
+        var defaultState = "unchecked"
+
+        
+        
+
+        circle.click(function(event)
+        {
+            console.log(toggleOn)
+            // circle.move(rect.x+35,rect.y)
+            // rect.fill({color:'green'})
+
+            // circle.fill({color:'white'})
+
+
+            if (rect.fill() == 'grey')
+            {
+                console.log('hereee')
+                defaultState = "on"
+                circle.move(rect.x+35,rect.y)
+                rect.fill({color:'green'})
+                circle.fill({color:'white'})
+
+                this.toggleOn  = true;
+
+            
+                transition()
+                
+
+            }
+
+            if (this.toggleOn == false)
+            {
+                rect.fill({ color: 'green'})
+                circle.fill({ color: 'red'})
+                circle.move(rect.x+35,rect.y)
+
+
+                this.toggleOn = true
+                defaultState = "on"
+                transition()
+            }
+            if (this.toggleOn == true)
+            {
+                console.log('in true')
+                rect.fill({ color: 'grey'})
+                circle.fill({ color: 'white'})
+                circle.move(rect.x+35,rect.y)
+
+
+
+                this.toggleOn = false;
+                defaultState = "off"
+                transition()
+                
+
+            }
+  
+        })
+        function transition()
+        {
+            if (stateEvent != null)
+            stateEvent(defaultState)
+        }
+
+
+
 
         return {
-            getIncrement: function() {
-                return increment
-            },
-
-            setIncrement: function() {
-
-            },
             move: function(x, y) {
                 rect.move(x, y);
+                circle.move(x,y)
                 rect.x = x;
                 rect.y = y;
             },
         }
+
+       
+
 
 
     }
@@ -37,74 +104,111 @@ var MyToolkit = (function() {
 
 
 
-    var scrollBar = function(height)
+
+
+    var progressBar = function(width, increment)
     {
         var bar = draw.group();
-        var width = 20
 
-        var rect = draw.rect(20,height).fill('white').opacity("0.4").stroke('black')
-        var thumb = draw.rect(width,20).fill('black')
-
-
-        // rect.add(thumb)
-
-        bar.add(rect)
-        bar.add(thumb)
+        var rect = draw.rect(width,40).fill('white').opacity("0.4").stroke('black')
         console.log('hi')
+        var thumb = draw.rect(0,40).fill('green')
+        // var x = setInterval(scroll(width), 3000);
 
-        // var runner = thumb.animate().height(9)
-        // runner.loop(4000,200,2)
+        scroll(width)
+
+
+        var frame = draw.group();
 
 
 
-        // thumb.animate(8000, 8000, 'now')
-
-       scroll()
-
-        // var i; 
-        // for (i; i++; i<100)
-        // {
-        //     thumb.move(0,i)
-        //     i += 10
-        //     console.log(i)
-
+        // var i = 0;
+        // function move() {
+        //   if (i == 0) {
+        //     i = 1;
+        //     var elem = thumb
+        //     var width = 1;
+        //     var id = setInterval(frame, 10);
+        //     function frame() {
+        //       if (width >= 100) {
+        //         clearInterval(id);
+        //         i = 0;
+        //       } else {
+        //         width++;
+        //         elem.style.width = width + "%";
+        //       }
+        //     }
+        //   }
         // }
+        
 
-        function scroll()
-        {
+    
+
+         function scroll(width)
+         {
 
 
-            for(let idx=0; idx < height; idx++) {
+            bar.add(rect)
+            bar.add(thumb)
+
+            bar.add(thumb)
+
+            console.log(width)
+
+
+
+            for(let idx=increment; idx < width; idx++) {
                 // thumb.move(0,idx)
                 // var thumb = draw.rect(20,idx).fill('black')
-        
+                // console.log(height)
                 // idx += 1
-                thumb = draw.rect(20,width).fill('black')
-                var runner = thumb.animate().height(9)
-                runner.loop(1000,200,20)
-                idx += 10
-                width += 10;
+                // var thumb = draw.rect(width,40).fill('grey')
+                bar.add(thumb)
+
+                var runner = thumb.animate().width(width).loop(20,1000,600)
+
+                idx += 20
+                increment += 20;
+                console.log(increment)
 
 
-                console.log(width)
+
+                //  if (idx >= 400)
+                // {
+                //     console.log('bruh')
+                //     thumb = draw.rect(0,0).fill('red')
+                //     thumb.move(rect)
+    
+                // }
+               
 
             }
-            
+            console.log(width)
         }
-
         
 
 
         return {
             move: function(x, y) {
-                rect.move(x, y);
-                rect.x = x;
-                rect.y = y;
-                thumb.move(x,y)
+                bar.move(x, y);
+                // thumb.move(x,y)
             },
+            getIncrement: function() {
+                return increment
+            },
+            incrementValue: function(newIncrement) {
+                var newIncrement = (width*(newIncrement))/100
+                increment = newIncrement
+                scroll(newIncrement)
+                console.log(width)
+                console.log((newIncrement/100))
+                console.log(newIncrement+'hi')
+                console.log(increment)
 
            
+        },
         }
+        
 
     }
 
@@ -332,7 +436,7 @@ var MyToolkit = (function() {
         rect.click(function(event){
 
             this.fill({ color: 'black'})
-
+                
             if (this.fill() == 'white')
             {
                 this.checked  = false;
@@ -584,7 +688,7 @@ var MyToolkit = (function() {
 
 
 
-return {Button, CheckBox, textBox, scrollBar, progressBar, Radio, radioButtons}
+return {Button, CheckBox, textBox, progressBar, toggle, Radio, radioButtons}
 }());
 
 export{MyToolkit}

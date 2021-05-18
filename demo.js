@@ -53,14 +53,19 @@ console.log(x[1]);
 
 
 
-var x = new MyToolkit.scrollBar(400);
+// var x = new MyToolkit.scrollBar(400);
 // x.move(100,900)
 
 
-// var y = new MyToolkit.progressBar(500, 45);
-// y.move(100,1000)
+var y = new MyToolkit.progressBar(500, 100);
+y.move(100,900)
+// y.setIncrement(50)
+y.incrementValue(100)
 
 
+
+var z = new MyToolkit.toggle();
+z.move(100,1000)
 
 
 // var check = new MyToolkit.Radio(4);
