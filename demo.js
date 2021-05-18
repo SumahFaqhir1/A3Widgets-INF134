@@ -65,7 +65,7 @@ y.incrementValue(100)
 
 
 var z = new MyToolkit.toggle();
-z.move(100,1000)
+z.move(100,800)
 z.stateChanged(function(event){
     console.log(event)
 })
