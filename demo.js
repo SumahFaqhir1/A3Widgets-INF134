@@ -66,6 +66,10 @@ y.incrementValue(100)
 
 var z = new MyToolkit.toggle();
 z.move(100,1000)
+z.stateChanged(function(event){
+    console.log(event)
+})
+
 
 
 // var check = new MyToolkit.Radio(4);

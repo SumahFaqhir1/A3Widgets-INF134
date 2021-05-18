@@ -25,51 +25,62 @@ var MyToolkit = (function() {
 
         circle.click(function(event)
         {
-            console.log(toggleOn)
-            // circle.move(rect.x+35,rect.y)
-            // rect.fill({color:'green'})
 
-            // circle.fill({color:'white'})
-
-
-            if (rect.fill() == 'grey')
+            if (toggleOn == false)
             {
-                console.log('hereee')
-                defaultState = "on"
-                circle.move(rect.x+35,rect.y)
-                rect.fill({color:'green'})
-                circle.fill({color:'white'})
-
-                this.toggleOn  = true;
-
-            
-                transition()
-                
-
-            }
-
-            if (this.toggleOn == false)
-            {
-                rect.fill({ color: 'green'})
-                circle.fill({ color: 'red'})
-                circle.move(rect.x+35,rect.y)
-
-
-                this.toggleOn = true
-                defaultState = "on"
-                transition()
-            }
-            if (this.toggleOn == true)
-            {
-                console.log('in true')
-                rect.fill({ color: 'grey'})
+                rect.fill({ color: 'green', opacity: "0.9"})
                 circle.fill({ color: 'white'})
                 circle.move(rect.x+35,rect.y)
 
 
+                toggleOn = true
+                defaultState = "toggle on"
+                transition()
+            }
+            else if (toggleOn == true)
+            {
+                rect.fill({ color: 'white'})
+                circle.fill({ color: 'grey'})
+                circle.move(rect.x,rect.y)
 
-                this.toggleOn = false;
-                defaultState = "off"
+
+                toggleOn = false;
+                defaultState = "toggle off"
+                transition()
+                
+
+            }
+  
+        })
+        function transition()
+        {
+            if (stateEvent != null)
+            stateEvent(defaultState)
+        }
+
+        rect.click(function(event)
+        {
+
+            if (toggleOn == false)
+            {
+                rect.fill({ color: 'green', opacity: "0.9"})
+                circle.fill({ color: 'white'})
+                circle.move(rect.x+35,rect.y)
+
+
+                toggleOn = true
+                defaultState = "toggle on"
+                transition()
+            }
+            else if (toggleOn == true)
+            {
+                rect.fill({ color: 'white'})
+                circle.fill({ color: 'grey'})
+                circle.move(rect.x,rect.y)
+
+
+                toggleOn = false;
+                defaultState = "toggle off"
                 transition()
                 
 
@@ -84,13 +95,17 @@ var MyToolkit = (function() {
 
 
 
-
         return {
             move: function(x, y) {
                 rect.move(x, y);
                 circle.move(x,y)
                 rect.x = x;
                 rect.y = y;
+            },
+            stateChanged: function(eventHandler)
+            {
+                stateEvent = eventHandler
+
             },
         }
 
@@ -111,7 +126,6 @@ var MyToolkit = (function() {
         var bar = draw.group();
 
         var rect = draw.rect(width,40).fill('white').opacity("0.4").stroke('black')
-        console.log('hi')
         var thumb = draw.rect(0,40).fill('green')
         // var x = setInterval(scroll(width), 3000);
 
@@ -153,7 +167,6 @@ var MyToolkit = (function() {
 
             bar.add(thumb)
 
-            console.log(width)
 
 
 
@@ -169,7 +182,6 @@ var MyToolkit = (function() {
 
                 idx += 20
                 increment += 20;
-                console.log(increment)
 
 
 
@@ -183,7 +195,6 @@ var MyToolkit = (function() {
                
 
             }
-            console.log(width)
         }
         
 
@@ -200,10 +211,7 @@ var MyToolkit = (function() {
                 var newIncrement = (width*(newIncrement))/100
                 increment = newIncrement
                 scroll(newIncrement)
-                console.log(width)
-                console.log((newIncrement/100))
-                console.log(newIncrement+'hi')
-                console.log(increment)
+             
 
            
         },
