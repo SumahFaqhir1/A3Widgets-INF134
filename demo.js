@@ -3,67 +3,47 @@
 
 import {MyToolkit} from './mytoolkit.js';
 
-// Implement a MyToolkit Button
+
+
+//button
 var btn = new MyToolkit.Button;
 btn.move(100,150);
 btn.setText('Button');
-
-// btn.onclick(function(e){
-// 	console.log(e.target);
-//     // console.log(e.target)
-//     // console.log(e)
-// });
 
 btn.stateChanged(function(event){
     console.log(event)
 })
 
-
+//checkbox
 var check = new MyToolkit.CheckBox;
 check.move(100,400);
 check.setText('Option1')
-
 
 check.stateChanged(function(event){
     console.log(event)
 })
 
-var text = new MyToolkit.textBox;
-// text.move(10,10)
+//radio buttons
+var y = new MyToolkit.radioButtons(2, ['Radio1', 'Radio2'])
+y.move(400,300)
+y.stateChanged(function(event){
+    console.log(event)
+})
 
 
-var check = new MyToolkit.CheckBox;
-check.move(100,500);
-check.setText('Option2')
+//scroll bar 
+var y = new MyToolkit.scrollBar(400);
+y.move(50,200)
 
 
-
-var check = new MyToolkit.Radio(5);
-check.move(100,600);
-check.setText('Radio17')
-
-var check2 = new MyToolkit.Radio(5);
-check2.move(100,700);
-check2.setText('Radio18')
-
-
-
-var x = new MyToolkit.radioButtons(5);
-console.log(x[1]);
-
-
-
-// var x = new MyToolkit.scrollBar(400);
-// x.move(100,900)
-
-
+//progress bar
 var y = new MyToolkit.progressBar(500, 100);
 y.move(100,900)
 // y.setIncrement(50)
 y.incrementValue(100)
 
 
-
+//custom toggle switch
 var z = new MyToolkit.toggle();
 z.move(100,800)
 z.stateChanged(function(event){
@@ -71,14 +51,9 @@ z.stateChanged(function(event){
 })
 
 
-
-// var check = new MyToolkit.Radio(4);
-// check.move(100,700);
-// check.setText('Radio2')
-
-// var radio = new MyToolkit.Radio;
-// radio.move(100,370);
-
+//Text Box
+var text = new MyToolkit.textBox;
+text.move(100,40)
 
 
 

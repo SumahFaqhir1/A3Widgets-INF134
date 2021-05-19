@@ -1,18 +1,69 @@
 import {SVG} from './svg.min.js';
 
 
+
 var draw = SVG().addTo('body').size('120%','150%');
 
 
 var MyToolkit = (function() {
-    var toggle = function()
+
+    var scrollBar = function(height)
     {
         var frame = draw.group();
+        var rect = draw.rect(30,height).fill('white').stroke('black').radius(10)
+        //actual scroll toggle 
+        var smallScroll = draw.rect(30,height/3).fill('black')
+        //set direction of scroll 
+        var direction = 'none'
+        this.stateEvent = null
+        this.defaultState = 'idle'
+        var limit = height + 80
+        //make sure the toggle is actually being clicked and not just hovered over
+        var mouseClick = false
+
+
+        frame.add(rect)
+        frame.add(smallScroll)
+
+
+        smallScroll.mousedown(function(event){
+            mouseClick = true
+        });
+
+
+        //if the mouse is dragging the scroll down, move according to the position
+        smallScroll .mousemove(function(event){
+            if (event.offsetY < limit && mouseClick == true)
+            {
+                smallScroll.move(rect.x, event.offsetY)                
+            }
+
+        })
+
+        return {
+            //move both the actual outline and the toggle 
+            move: function(x, y) {
+                rect.move(x,y)
+                smallScroll.move(x,y)
+                rect.x = x;
+                rect.y = y;
+            },
+        }
+    }
+
+
+    var toggle = function()
+    {
+        //custom toggle with on and off property 
+        var frame = draw.group();
+        //outer rectangle
         var rect = draw.rect(75,40).fill('grey').rx("20").ry("20").opacity("0.4").stroke('black')
+        //inner rectangle 
         var circle = draw.circle(39,39).fill('white').stroke('black').opacity("0.6")
         frame.add(rect)
         frame.add(circle)
 
+        //default toggle is off
         var toggleOn = false;
 
   
@@ -28,6 +79,7 @@ var MyToolkit = (function() {
 
             if (toggleOn == false)
             {
+                //if toggle is off and is clicked, switch to on mode
                 rect.fill({ color: 'green', opacity: "0.9"})
                 circle.fill({ color: 'white'})
                 circle.move(rect.x+35,rect.y)
@@ -39,6 +91,7 @@ var MyToolkit = (function() {
             }
             else if (toggleOn == true)
             {
+                //if on and clicked, turn off toggle
                 rect.fill({ color: 'white'})
                 circle.fill({ color: 'grey'})
                 circle.move(rect.x,rect.y)
@@ -60,6 +113,8 @@ var MyToolkit = (function() {
 
         rect.click(function(event)
         {
+            //duplicate function just to make sure that the inner 
+            // and outer toggle both take input and change
 
             if (toggleOn == false)
             {
@@ -82,8 +137,6 @@ var MyToolkit = (function() {
                 toggleOn = false;
                 defaultState = "toggle off"
                 transition()
-                
-
             }
   
         })
@@ -108,55 +161,23 @@ var MyToolkit = (function() {
 
             },
         }
-
-       
-
-
-
     }
-
-
-
-
-
 
 
     var progressBar = function(width, increment)
     {
         var bar = draw.group();
-
+        //empty bar 
         var rect = draw.rect(width,40).fill('white').opacity("0.4").stroke('black')
+        //actual progress thumbnail
         var thumb = draw.rect(0,40).fill('green')
         // var x = setInterval(scroll(width), 3000);
 
         scroll(width)
+        //start the progress bar 
 
 
         var frame = draw.group();
-
-
-
-        // var i = 0;
-        // function move() {
-        //   if (i == 0) {
-        //     i = 1;
-        //     var elem = thumb
-        //     var width = 1;
-        //     var id = setInterval(frame, 10);
-        //     function frame() {
-        //       if (width >= 100) {
-        //         clearInterval(id);
-        //         i = 0;
-        //       } else {
-        //         width++;
-        //         elem.style.width = width + "%";
-        //       }
-        //     }
-        //   }
-        // }
-        
-
-    
 
          function scroll(width)
          {
@@ -165,34 +186,16 @@ var MyToolkit = (function() {
             bar.add(rect)
             bar.add(thumb)
 
-            bar.add(thumb)
-
-
-
-
             for(let idx=increment; idx < width; idx++) {
-                // thumb.move(0,idx)
-                // var thumb = draw.rect(20,idx).fill('black')
-                // console.log(height)
-                // idx += 1
-                // var thumb = draw.rect(width,40).fill('grey')
+              
                 bar.add(thumb)
+                //add the thumb again because it is updating frequently 
 
-                var runner = thumb.animate().width(width).loop(20,1000,600)
-
+                var runner = thumb.animate().width(width).loop(200,1000,600)
+                //run it for a 200 loop with delay 
                 idx += 20
                 increment += 20;
-
-
-
-                //  if (idx >= 400)
-                // {
-                //     console.log('bruh')
-                //     thumb = draw.rect(0,0).fill('red')
-                //     thumb.move(rect)
-    
-                // }
-               
+                //gradually increase the increment that was passed in as a parameter 
 
             }
         }
@@ -205,79 +208,43 @@ var MyToolkit = (function() {
                 // thumb.move(x,y)
             },
             getIncrement: function() {
+                //returns the current increment level 
                 return increment
             },
             incrementValue: function(newIncrement) {
                 var newIncrement = (width*(newIncrement))/100
                 increment = newIncrement
                 scroll(newIncrement)
-             
-
-           
+                //changes increment and continues again 
         },
         }
         
 
     }
 
-    
-
-
-
-
     var textBox = function()
     {
         var frame = draw.group();
         frame.rect(400,100).stroke("orange").fill("white")
+        //frame of the textbox
         frame.click(function(event){
             console.log("window")
             console.log(event)
         })
 
         var text = frame.text("").move(40,42)
-        // var caret = frame.rect(2,15).move(50,50)
-        // var runner = caret.animate().width(0)
-        // runner.loop(1000,1,0)
-
-        
-
-        // SVG.on(window, 'keyup', (event) => {
-        //     text.text(text.text() + event.key)
-        //     caret.x(text.length() + 40)
-
-            
-        // })
-
 
         frame.mouseover(function(){
-            var caret = frame.rect(2,15).move(50,50)
+            //animate caret when hovered over and move 
+            var caret = frame.rect(2,15).move(frame.x,frame.y)
             var runner = caret.animate().width(0)
-            runner.loop(1000,1,0)
-
-            
-
-
-
-
-            // runner.loop(1000,1,0)
-
-
-
-
-
-            
-            // console.log(rect.mouseover)
-            // var caret = frame.rect(2,15).move(50,50)
-            // var runner = caret.animate().width(0)
-            // runner.loop(1000,1,0)
-
-
-            
+            runner.loop(1000,1,0) 
            
 
         })
 
             SVG.on(window, 'keyup', (event) => {
+                //when text is entered in, recieve it 
             text.text(text.text() + event.key)
             update()
             // caret.x(text.length() + 40)
@@ -295,26 +262,23 @@ var MyToolkit = (function() {
    
 
         return {
-            // getText: function()
-            // {
-            //     SVG.on(window, 'keyup', (event) => {
-            //         text.text(text.text() + event.key)
-            //         caret.x(text.length() + 40)
-        
-            //     })
+            move: function(x,y)
+            {
+                //move both the caret and the actual frame
+                frame.move(x,y)
+                // caret.move(x,y)
+                frame.x = x
+                frame.y = y
+            },
+
+            getText: function()
+            {
+             //get the text input by the user 
                 
-            // }
+            }
         }
       
-
-        // return frame;
-
-        // frame.move(10,10)
-
-
     }
-
-
 
 
 
@@ -324,10 +288,11 @@ var MyToolkit = (function() {
 
 
         var rect = draw.rect(100,50).fill('gray').rx("20").ry("20").opacity("0.4").stroke('black')
-        
+        //outer rectangle for button
         var clickEvent = null
         var stateEvent = null
         var defaultState = "idle"
+        //default is idle because we don't want anything pressed
 
 
         button.add(rect);
@@ -345,20 +310,14 @@ var MyToolkit = (function() {
             this.fill({ color: 'gray'})
             defaultState = "idle"
             transition()
+            //if state changes, use the transition function to capture new changes 
         })
         rect.mouseup(function(){
             this.fill({ color: 'gray'})
             defaultState = "idle"
             transition()
         })
-        // rect.click(function(event){
-        //     // console.log(event.type)
-        //     this.fill({ color: 'orange'})
-        //     if(clickEvent != null)
-        //         clickEvent(event)
-        // })
-
-
+     
 
         rect.mousedown(function()
         {
@@ -380,6 +339,7 @@ var MyToolkit = (function() {
 
         function transition()
         {
+            //default state is null but if not, pass in new to stateEvent()
             if (stateEvent != null)
             stateEvent(defaultState)
         }
@@ -391,6 +351,7 @@ var MyToolkit = (function() {
                 rect.move(x, y);
                 rect.x = x;
                 rect.y = y;
+                //move everything when the button is moved 
             },
             onclick: function(eventHandler){
                 clickEvent = eventHandler
@@ -421,25 +382,17 @@ var MyToolkit = (function() {
         var checked = false
         var CheckBox = draw.group();
         var rect = draw.rect(40,40).fill('white').stroke('black')
-        
+        //rect for the checkbox 
         
         var clickEvent = null
         var stateEvent = null
         var defaultState = "unchecked"
+        //default is empty/unchecked until user selects
 
         CheckBox.add(rect);
 
 
     
-      
-        // rect.mouseout(function(){
-        //     this.fill({ color: 'white'})
-        // })
-        // rect.mouseup(function(){
-        //     this.fill({ color: 'white'})
-
-        // })
-
     
         rect.click(function(event){
 
@@ -447,6 +400,7 @@ var MyToolkit = (function() {
                 
             if (this.fill() == 'white')
             {
+                //if unchecked and white, the state is unchecked 
                 this.checked  = false;
                 defaultState = "unchecked"
                 transition()
@@ -455,6 +409,7 @@ var MyToolkit = (function() {
 
             if (this.checked == false)
             {
+                //if checked after the state was unchecked
                 this.fill({ color: 'gray'})
                 this.checked = true
                 defaultState = "checked"
@@ -463,6 +418,7 @@ var MyToolkit = (function() {
 
             else if (this.checked != false)
             {
+                //restore to the default state if unchecked again 
                 this.fill({ color: 'white'})
                 this.checked = false;
                 defaultState = "unchecked"
@@ -471,15 +427,13 @@ var MyToolkit = (function() {
 
             }
 
-            // if(clickEvent != null)
-            //     clickEvent(event)
-
         })
 
         function transition()
         {
             if (stateEvent != null)
             stateEvent(defaultState)
+            //change from selected to unselected and vice versa 
         }
 
         
@@ -497,9 +451,10 @@ var MyToolkit = (function() {
             },
             setText: function(text)
             {
+                //sets the text at the right of the button
                 var text = draw.text(text);
                 text.font({anchor: 'middle',fill: 'black', size: 25, family: 'Helvetica'});
-        
+                //anchors the text near the middle 
                 CheckBox.add(text);
                 text.move(rect.x + 50, rect.y+5);
                 //centering the buttons
@@ -517,67 +472,95 @@ var MyToolkit = (function() {
 
     }
 
-    var radioControl = function(array){
 
-
-
-
-
-
-
-        return {
-            createNew: function(array) {
-                for(let i=0; i <= array.length; i) {
-                    
-
-
-
-                }
-            },
-            create: function(value)
-            {
-                var radio = draw.group();
-                var circle = draw.circle(40,40).fill('white').stroke('black')
-                var clickEvent = null
-
-                radio.add(circle);
-
-            }
-        }
-     
-
-
-
-
-
-
-    }
-
-
-
-
-    var radioButtons = function(num){
+    var radioButtons = function(num,names){
+        //parameter is an array of the number of widgets they want to create and the names for them 
         let totalElems = num;
+        var namesArray = [];
+        namesArray.push(names)
+
+        var stateEvent = null
+        var defaultState = 'unselected'
+
+
         const groupName = "radioGroup";
         let radioButtons = [];
 
+
+        var radio = draw.group();
+        var trackY = 1;
+        var buttonGroup = []
+
+
+
+        //takes all the parameters and puts them in an array for future use 
         for(let idx=0; idx < totalElems; idx++) {
-            let input = document.createElement("input");
-            input.name = groupName;
-            //+1 so we don't label them according to their index position
-            input.value = (idx+1); 
-            input.type = "radio";
-            //let's set the last element to checked
-            if(idx === 3) {
-                input.checked = "checked";
+            if (idx == 1)
+            {
+                radioButtons.push([names[idx],'checked'])
             }
-            radioButtons.push(input);
+
+            radioButtons.push([names[idx],'unchecked'])
+
         }
-        radioControl(radioButtons);
-        return radioButtons;
+
+
+
+        //draw the outer circle and inner circles in a loop for all the buttons
+        for (var idx = 0; idx < radioButtons.length; idx++){
+            var circle = draw.circle(30,30).fill('white').stroke('black')
+
+            circle.move(0,trackY)
+            var radioText = draw.text(radioButtons[idx][0]).move(40,trackY+5)
+            //if the property has been checked, mark as selected in the UI
+            if (radioButtons[idx][1] == 'checked'){
+                var button = draw.circle(25).fill('#Black')
+                button.move(1, trackY+3)
+                button.hide()
+            }
+            //add all the components to an actual button and a list of buttons
+            buttonGroup.push(circle)
+            radio.add(circle)
+            radio.add(button)
+            radio.add(radioText)
+
+            trackY += 50
+            //add space between the elements so they aren't cluttered 
+
+        }
+
+     
+        buttonGroup.map(e => e.node.addEventListener("click", function()
+        {
+            //make sure only one value is selected at a time 
+            button.show();
+            button.move(e.x()+2, e.y()+2);
+            defaultState = "Selected"
+            transition()
+
+        }));
+
+        
+        function transition()
+        {
+            if (stateEvent != null)
+            stateEvent(defaultState)
+        }
+
+
+     
+        return{
+            move: function(x, y) {
+                radio.move(x, y);
+            },
+            stateChanged: function(eventHandler)
+            {
+                stateEvent = eventHandler
+
+            },
+        }
+
     }
-
-
 
 
 
@@ -587,116 +570,8 @@ var MyToolkit = (function() {
 
 
 
-    var Radio = function(num){
-        var checked = false
 
-        var i; 
-        console.log(num)
-
-
-        // for (i=0; i<=num; i++)
-        // {
-            // console.log('for loop')
-            // var radio = draw.group();
-            // var circle = draw.circle(40,40).fill('white').stroke('black')
-            // var clickEvent = null
-    
-            // radio.add(circle);
-
-            // console.log(radio)
-
-
-
-
-            // console.log(circle.x)
-
-            
-        // }
-
-
-
-        
-
-
-
-
-        var radio = draw.group();
-        var circle = draw.circle(40,40).fill('white').stroke('black')
-        var clickEvent = null
-
-        radio.add(circle);
-
-
-    
-      
-        // rect.mouseout(function(){
-        //     this.fill({ color: 'white'})
-        // })
-        circle.mouseup(function(){
-            this.fill({ color: 'white'})
-
-        })
-
-    
-        circle.click(function(event){
-
-            this.fill({ color: 'black'})
-
-            if (this.fill() == 'white')
-            {
-                this.checked  = false;
-            }
-
-            if (this.checked == false)
-            {
-                this.fill({ color: 'gray'})
-                this.checked = true
-            }
-
-            else if (this.checked != false)
-            {
-                this.fill({ color: 'white'})
-                this.checked = false;
-
-            }
-
-            if(clickEvent != null)
-                clickEvent(event)
-
-        })
-        
-        return {
-            move: function(x, y) {
-                circle.move(x, y);
-
-                circle.x = x;
-                circle.y = y
-            },
-
- 
-            onclick: function(eventHandler){
-                clickEvent = eventHandler
-            },
-            setText: function(text)
-            {
-                var text = draw.text(text);
-                text.font({anchor: 'middle',fill: 'black', size: 25, family: 'Helvetica'});
-        
-                radio.add(text);
-                text.move(circle.x + 50, circle.y+5);
-                //centering the buttons
-                //passing in the x and y values for the buttons
-            },
-
-            
-        }
-
-    }
-    
-
-
-
-return {Button, CheckBox, textBox, progressBar, toggle, Radio, radioButtons}
+return {Button, CheckBox, textBox, scrollBar, progressBar, toggle, radioButtons}
 }());
 
 export{MyToolkit}
